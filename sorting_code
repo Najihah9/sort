@@ -1,0 +1,114 @@
+
+    <body>
+
+    <section id="input">
+    <form>
+
+    <input type="number" readonly id="ID" value="">
+
+    <input type="text" id="name" placeholder="UserName">
+
+    <input type="text" id="occupation" placeholder="UserOccupation">
+
+    <input type="button" id="button" value="Add">
+
+    </form>
+    </section>
+
+    <br>
+
+    <centre><br>
+
+     Sort by : <select name="sort" id ="sort">
+             <option value ="ID">UserID</option>
+             <option value ="name">UserName</option>
+             <option value ="occupation">UserOccupation</option>
+             </select>
+    
+
+    <br></centre>        
+
+    <section id="output">
+
+    </section> 
+    <script>
+
+    let counter = 1;
+    let data = [];
+    function Add(){
+      var button = document.getElementById('button');
+      button.addEventListener('click', Save, false);
+      let sort = document.getElementById('sort');
+      sort.addEventListener('change', sortDisplay, false);
+      document.getElementById('ID').value = counter;
+    }
+    function sortDisplay(){
+      console.log("Sorting", document.getElementById('sort').value);
+      let sort = document.getElementById('sort').value;
+      if(sort === "ID"){
+        data.sort(function (a, b) {
+          return a.id - b.id;
+        });
+      }
+      else{
+        sortName_Occupation(sort);
+      }
+      console.log(data);
+      afterSort();
+      
+      
+    }
+    function Save(){
+
+
+      let name = document.getElementById('name');
+      let occupation = document.getElementById('occupation');
+      data.push({id: counter, name: name.value, occupation: occupation.value });
+      console.log(data);
+      counter++;
+      document.getElementById('ID').value = counter;
+      name.value='';
+      occupation.value ='';
+
+      let outputSection  = document.getElementById('output');
+      let outputData = data[data.length - 1];
+      let newP = document.createElement('p');
+      newP.textContent = outputData['id'] + " " + outputData['name'] + "  "+outputData['occupation'];
+      outputSection.appendChild(newP);
+
+
+    }
+
+    function sortName_Occupation(attribute){
+      data.sort(function(a, b) {
+        var nameA = a[attribute].toUpperCase(); // ignore upper and lowercase
+        var nameB = b[attribute].toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      });
+    }
+
+    function afterSort(){
+      let outputSection  = document.getElementById('output');
+      outputSection.innerHTML = '';
+      let fragment = document.createDocumentFragment();
+      data.forEach(function(c) {
+          let p = document.createElement('p');
+          p.textContent = c['id'] + " " + c['name'] + "  "+c['occupation'];
+          fragment.appendChild(p);
+      });
+      outputSection.appendChild(fragment);
+
+    }
+
+
+    window.addEventListener('load', Add, false);
+    </script>
+    </body>
